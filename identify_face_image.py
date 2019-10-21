@@ -11,12 +11,22 @@ import os
 import time
 import pickle
 import sys
-
-img_path='abc.jpg'
+from PIL import Image, ImageEnhance 
+img_path='input_13.jpg'
 modeldir = './model/20170511-185253.pb'
 classifier_filename = './class/classifier.pkl'
 npy='./npy'
 train_img="./train_img"
+test_image_processsing = "/home/koli/Downloads/Facenet/test_imge_cropped/"
+#Create the identity filter, but with the 1 shifted to the right!
+kernel = np.zeros( (9,9), np.float32)
+kernel[4,4] = 2.0   #Identity, times two! 
+
+#Create a box filter:
+boxFilter = np.ones( (9,9), np.float32) / 81.0
+
+#Subtract the two:
+kernel = kernel - boxFilter
 
 with tf.Graph().as_default():
     gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.6)
@@ -32,9 +42,11 @@ with tf.Graph().as_default():
         batch_size = 1000
         image_size = 182
         input_image_size = 160
+        d=0
         
         HumanNames = os.listdir(train_img)
         HumanNames.sort()
+
 
         print('Loading feature extraction model')
         facenet.load_model(modeldir)
@@ -56,7 +68,7 @@ with tf.Graph().as_default():
         print('Start Recognition!')
         prevTime = 0
         # ret, frame = video_capture.read()
-        frame = cv2.imread(img_path,0)
+        frame = cv2.imread(img_path)
 
         frame = cv2.resize(frame, (0,0), fx=0.5, fy=0.5)    #resize frame (optional)
 
@@ -70,6 +82,8 @@ with tf.Graph().as_default():
                 frame = facenet.to_rgb(frame)
             frame = frame[:, :, 0:3]
             bounding_boxes, _ = detect_face.detect_face(frame, minsize, pnet, rnet, onet, threshold, factor)
+            print("bounding_boxes:", bounding_boxes)
+
             nrof_faces = bounding_boxes.shape[0]
             print('Face Detected: %d' % nrof_faces)
 
@@ -97,36 +111,61 @@ with tf.Graph().as_default():
 
                     cropped.append(frame[bb[i][1]:bb[i][3], bb[i][0]:bb[i][2], :])
                     cropped[i] = facenet.flip(cropped[i], False)
+                    #image resize
+
+                    #img = cropped[i]
+                    #imResize = cv2.resize(img, (182,182))
+
+                    #custom = cv2.filter2D(imResize, -1, kernel)
+                    #cv2.imwrite(os.path.join(test_image_processsing , "file"+str(i)+".jpg"), custom)
+
+                    #add for loop 
                     scaled.append(misc.imresize(cropped[i], (image_size, image_size), interp='bilinear'))
+                    img1 = scaled[i]
+                    cv2.imwrite(os.path.join(test_image_processsing , "file"+str(i)+".png"), img1)
                     scaled[i] = cv2.resize(scaled[i], (input_image_size,input_image_size),
                                            interpolation=cv2.INTER_CUBIC)
                     scaled[i] = facenet.prewhiten(scaled[i])
+                    
                     scaled_reshape.append(scaled[i].reshape(-1,input_image_size,input_image_size,3))
+                    #cv2.imwrite("./test_image_preprocesss"+"file"+str(i)+".jpg",cropped[i])
+                    
+                    #print("scaled_reshape::", scaled_reshape)
                     feed_dict = {images_placeholder: scaled_reshape[i], phase_train_placeholder: False}
                     emb_array[0, :] = sess.run(embeddings, feed_dict=feed_dict)
                     predictions = model.predict_proba(emb_array)
-                    print(predictions)
+                    print("predictions:", predictions)
                     best_class_indices = np.argmax(predictions, axis=1)
-                    # print(best_class_indices)
+                    print("best_class_indices:", best_class_indices)
                     best_class_probabilities = predictions[np.arange(len(best_class_indices)), best_class_indices]
-                    print(best_class_probabilities)
+                    print("Best Class Probabilities:", best_class_probabilities)
                     cv2.rectangle(frame, (bb[i][0], bb[i][1]), (bb[i][2], bb[i][3]), (0, 255, 0), 2)    #boxing face
-
+                   
+                    
                     #plot result idx under box
                     text_x = bb[i][0]
                     text_y = bb[i][3] + 20
-                    print('Result Indices: ', best_class_indices[0])
-                    print(HumanNames)
+                    #print('Result Indices: ', best_class_indices[0])
+                    #print(HumanNames)
                     for H_i in HumanNames:
-                        # print(H_i)
+                        #print("H_i:", H_i)
+                        unknown_names =  "Unknown"
                         if HumanNames[best_class_indices[0]] == H_i:
                             result_names = HumanNames[best_class_indices[0]]
                             cv2.putText(frame, result_names, (text_x, text_y), cv2.FONT_HERSHEY_COMPLEX_SMALL,
-                                        1, (0, 0, 255), thickness=1, lineType=2)
+                                      0.5, (0, 0, 255), thickness=1, lineType=2)
+                        """
+                        else:
+                        	cv2.putText(frame, unknown_names, (text_x, text_y), cv2.FONT_HERSHEY_COMPLEX_SMALL,
+                                        0.5, (0, 0, 255), thickness=1, lineType=2)
+                        """
+                        
             else:
                 print('Unable to align')
-        cv2.imshow('Image', frame)
-
+        #cv2.imshow('Image.jpg', frame)
+        cv2.imwrite('Output_13.jpg', frame)
+        """
         if cv2.waitKey(1000000) & 0xFF == ord('q'):
             sys.exit("Thanks")
         cv2.destroyAllWindows()
+        """
