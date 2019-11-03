@@ -18,14 +18,12 @@ classifier_filename = './class/classifier.pkl'
 npy='./npy'
 train_img="./train_img"
 test_image_processsing = "/home/koli/Downloads/Facenet/test_imge_cropped/"
-#Create the identity filter, but with the 1 shifted to the right!
 kernel = np.zeros( (9,9), np.float32)
 kernel[4,4] = 2.0   #Identity, times two! 
 
-#Create a box filter:
+
 boxFilter = np.ones( (9,9), np.float32) / 81.0
 
-#Subtract the two:
 kernel = kernel - boxFilter
 
 with tf.Graph().as_default():
