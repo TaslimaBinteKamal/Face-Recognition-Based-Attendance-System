@@ -19,7 +19,7 @@ from datetime import datetime
 
 main = Blueprint('main', __name__)
 
-
+#Route to home
 @main.route("/")
 @main.route("/home")
 def home():
@@ -29,7 +29,7 @@ def home():
     return render_template('home.html')
 
 
-
+#route to face recogniition results
 @main.route("/result", methods=['POST'])
 def result():
     path = './demo/static/'
