@@ -51,9 +51,9 @@ def layer(op):
         layer_output = op(self, layer_input, *args, **kwargs)
         # Add to layer LUT.
         self.layers[name] = layer_output
-        # This output is now the input for the next layer.
+       
         self.feed(layer_output)
-        # Return self for chained calls.
+        # Return self for chained calls
         return self
 
     return layer_decorated
@@ -95,9 +95,7 @@ class Network(object):
                             raise
 
     def feed(self, *args):
-        '''Set the input(s) for the next operation by replacing the terminal nodes.
-        The arguments can be either layer names or the actual layers.
-        '''
+       
         assert len(args) != 0
         self.terminals = []
         for fed_layer in args:
