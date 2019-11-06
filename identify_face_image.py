@@ -1,3 +1,4 @@
+#recognition of faces from images
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -32,9 +33,9 @@ with tf.Graph().as_default():
     with sess.as_default():
         pnet, rnet, onet = detect_face.create_mtcnn(sess, npy)
 
-        minsize = 20  # minimum size of face
-        threshold = [0.6, 0.7, 0.7]  # three steps's threshold
-        factor = 0.709  # scale factor
+        minsize = 20  
+        threshold = [0.6, 0.7, 0.7]  
+        factor = 0.709  
         margin = 44
         frame_interval = 3
         batch_size = 1000
