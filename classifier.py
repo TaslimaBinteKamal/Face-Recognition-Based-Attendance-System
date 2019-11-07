@@ -53,7 +53,7 @@ class training:
 
                 class_names = [cls.name.replace('_', ' ') for cls in img_data]
 
-                # Saving model
+                # Saving model in the folder model
                 with open(classifier_file_name, 'wb') as outfile:
                     pickle.dump((model, class_names), outfile)
                 return classifier_file_name
