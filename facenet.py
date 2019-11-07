@@ -17,16 +17,7 @@ import re
 from tensorflow.python.platform import gfile
 
 def triplet_loss(anchor, positive, negative, alpha):
-    """Calculate the triplet loss according to the FaceNet paper
     
-    Args:
-      anchor: the embeddings for the anchor images.
-      positive: the embeddings for the positive images.
-      negative: the embeddings for the negative images.
-  
-    Returns:
-      the triplet loss according to the FaceNet paper as a float tensor.
-    """
     with tf.variable_scope('triplet_loss'):
         pos_dist = tf.reduce_sum(tf.square(tf.subtract(anchor, positive)), 1)
         neg_dist = tf.reduce_sum(tf.square(tf.subtract(anchor, negative)), 1)
@@ -37,9 +28,7 @@ def triplet_loss(anchor, positive, negative, alpha):
     return loss
   
 def decov_loss(xs):
-    """Decov loss as described in https://arxiv.org/pdf/1511.06068.pdf
-    'Reducing Overfitting In Deep Networks by Decorrelating Representation'
-    """
+    
     x = tf.reshape(xs, [int(xs.get_shape()[0]), -1])
     m = tf.reduce_mean(x, 0, True)
     z = tf.expand_dims(x-m, 2)
