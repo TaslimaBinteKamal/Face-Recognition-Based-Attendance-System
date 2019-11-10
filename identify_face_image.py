@@ -103,17 +103,14 @@ with tf.Graph().as_default():
                     bb[i][2] = det[i][2]
                     bb[i][3] = det[i][3]
 
-                    # inner exception
+                 
                     if bb[i][0] <= 0 or bb[i][1] <= 0 or bb[i][2] >= len(frame[0]) or bb[i][3] >= len(frame):
                         print('face is too close')
                         continue
 
                     cropped.append(frame[bb[i][1]:bb[i][3], bb[i][0]:bb[i][2], :])
                     cropped[i] = facenet.flip(cropped[i], False)
-                    #image resize
-
-                    #img = cropped[i]
-                    #imResize = cv2.resize(img, (182,182))
+                   
 
                     #custom = cv2.filter2D(imResize, -1, kernel)
                     #cv2.imwrite(os.path.join(test_image_processsing , "file"+str(i)+".jpg"), custom)
