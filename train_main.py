@@ -10,5 +10,4 @@ classifier_filename = './class/classifier.pkl'
 print ("<===========Start Training================>")
 obj=training(datadir,modeldir,classifier_filename)
 get_file=obj.main_train()
-#print('Saved classifier model to file "%s"' % get_file)
 sys.exit("All Done")
