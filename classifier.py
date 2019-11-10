@@ -46,7 +46,7 @@ class training:
 
                 classifier_file_name = os.path.expanduser(self.classifier_filename)
 
-                # Training Started
+                # Start training
                 print('Training Started')
                 model = SVC(kernel='linear', probability=True)
                 model.fit(emb_array, label)
