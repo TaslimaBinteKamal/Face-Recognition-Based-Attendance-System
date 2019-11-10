@@ -25,8 +25,8 @@ class preprocesses:
             with sess.as_default():
                 pnet, rnet, onet = detect_face.create_mtcnn(sess, './npy')
 
-        minsize = 20  # minimum size of face
-        threshold = [0.6, 0.7, 0.7]  # three steps's threshold
+        minsize = 20 
+        threshold = [0.6, 0.7, 0.7]  
         factor = 0.709  # scale factor
         margin = 44
         image_size = 182
