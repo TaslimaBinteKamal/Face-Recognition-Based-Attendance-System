@@ -29,7 +29,7 @@ class training:
                 embeddings = tf.get_default_graph().get_tensor_by_name("embeddings:0")
                 phase_train_placeholder = tf.get_default_graph().get_tensor_by_name("phase_train:0")
                 embedding_size = embeddings.get_shape()[1]
-
+               
                 print('Extracting features of images for model')
                 batch_size = 1000
                 image_size = 160
@@ -53,7 +53,7 @@ class training:
 
                 class_names = [cls.name.replace('_', ' ') for cls in img_data]
 
-                # Saving model in the folder model
+                # Saving the pickle file in the folder model
                 with open(classifier_file_name, 'wb') as outfile:
                     pickle.dump((model, class_names), outfile)
                 return classifier_file_name
