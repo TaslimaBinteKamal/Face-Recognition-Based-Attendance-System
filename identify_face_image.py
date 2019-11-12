@@ -60,7 +60,7 @@ with tf.Graph().as_default():
         with open(classifier_filename_exp, 'rb') as infile:
             (model, class_names) = pickle.load(infile)
 
-        # video_capture = cv2.VideoCapture("akshay_mov.mp4")
+        
         c = 0
 
 
