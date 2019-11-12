@@ -13,9 +13,9 @@ def layer(op):
     '''Decorator for composable network layers.'''
 
     def layer_decorated(self, *args, **kwargs):
-        # Automatically set a name if not provided.
+        
         name = kwargs.setdefault('name', self.get_unique_name(op.__name__))
-        # Figure out the layer inputs.
+        
         if len(self.terminals) == 0:
             raise RuntimeError('No input variables found for layer %s.' % name)
         elif len(self.terminals) == 1:
