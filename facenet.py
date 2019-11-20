@@ -1,4 +1,3 @@
-# pylint: disable=missing-docstring
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -65,12 +64,7 @@ def shuffle_examples(image_paths, labels):
     return image_paths_shuff, labels_shuff
 
 def read_images_from_disk(input_queue):
-    """Consumes a single filename and label as a ' '-delimited string.
-    Args:
-      filename_and_label_tensor: A scalar string tensor.
-    Returns:
-      Two tensors: the decoded image, and the string label.
-    """
+  
     label = input_queue[1]
     file_contents = tf.read_file(input_queue[0])
     example = tf.image.decode_png(file_contents, channels=3)
