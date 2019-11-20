@@ -16,10 +16,11 @@ import pickle
 import sys
 from PIL import Image, ImageEnhance 
 from datetime import datetime
+import numpy as np
 
 main = Blueprint('main', __name__)
 
-#Route to home
+
 @main.route("/")
 @main.route("/home")
 def home():
@@ -29,14 +30,15 @@ def home():
     return render_template('home.html')
 
 
-#route to face recogniition results
+
 @main.route("/result", methods=['POST'])
 def result():
     path = './demo/static/'
     final_names=[];
     now = datetime.now()
     timestamp = datetime.timestamp(now)
-
+    output_csv_path = "/home/koli/Desktop/SPL-3-v1/flask codes/demo/static/output.csv"
+    csv_file="file_name.csv"
     
     f = request.files['file']
     img_path=f.filename
@@ -183,6 +185,7 @@ def result():
                             if HumanNames[best_class_indices[0]] == H_i:
                                 result_names = HumanNames[best_class_indices[0]]
                                 final_names.append(result_names)
+                                np.savetxt("./demo/static/file_name.csv", final_names, delimiter=",", fmt='%s', header="Name")
                                 print(result_names)
                                 cv2.putText(frame, result_names, (text_x, text_y), cv2.FONT_HERSHEY_COMPLEX_SMALL,
                                           0.3, (0, 0, 255), thickness=1, lineType=2)
@@ -199,4 +202,4 @@ def result():
             cv2.imwrite(os.path.join(path, output), frame)
             
 
-        return render_template('result.html', input = str(timestamp)+img_path, output=output, final_names=final_names)
+        return render_template('result.html', input = str(timestamp)+img_path, output=output, final_names=final_names, csv_file=csv_file)
