@@ -17,6 +17,7 @@ import sys
 from PIL import Image, ImageEnhance 
 from datetime import datetime
 import numpy as np
+from flask_login import login_required 
 
 main = Blueprint('main', __name__)
 
@@ -32,6 +33,7 @@ def home():
 
 
 @main.route("/result", methods=['POST'])
+@login_required 
 def result():
     path = './demo/static/'
     final_names=[];
@@ -182,7 +184,7 @@ def result():
                         for H_i in HumanNames:
                             #print("H_i:", H_i)
                             unknown_names =  "Unknown"
-                            if HumanNames[best_class_indices[0]] == H_i:
+                            if HumanNames[best_class_indices[0]] == H_i and best_class_probabilities>0.16:
                                 result_names = HumanNames[best_class_indices[0]]
                                 final_names.append(result_names)
                                 np.savetxt("./demo/static/file_name.csv", final_names, delimiter=",", fmt='%s', header="Name")
