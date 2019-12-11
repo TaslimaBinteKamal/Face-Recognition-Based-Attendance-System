@@ -77,7 +77,7 @@ class preprocesses:
                                                          (det[:, 1] + det[:, 3]) / 2 - img_center[0]])
                                     offset_dist_squared = np.sum(np.power(offsets, 2.0), 0)
                                     index = np.argmax(
-                                        bounding_box_size - offset_dist_squared * 2.0)  # some extra weight on the centering
+                                        bounding_box_size - offset_dist_squared * 2.0)  
                                     det = det[index, :]
                                 det = np.squeeze(det)
                                 bb_temp = np.zeros(4, dtype=np.int32)
