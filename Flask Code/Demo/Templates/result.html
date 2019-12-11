@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+	<a href="{{url_for('static', filename=csv_file)}}" class="btn btn-sm" download
+                                                        style="background-color: #243F61;  color:white; cursor: pointer;"><i
+                                                            class="fa fa-download"></i> Download CSV</a>
+	<h2>List of recognized students:</h2>
+	
+	<table class="table">
+	  <thead class="thead-light">
+	    <tr>
+	      <th scope="col">#</th>
+	      <th scope="col">Name</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	{% for name in final_names %}
+		 <tr>
+	      <th scope="row">{{loop.index}}</th>
+	      <td>{{ name }}</td>
+	    </tr>
+		{% endfor %}
+	  </tbody>
+	</table>
+
+	<img src="{{url_for('static', filename=input)}}" style="max-width: 550px; padding-right: 5px" />
+	<img src="{{url_for('static', filename=output)}}" style="min-width: 550px"/>
+{% endblock content %}
