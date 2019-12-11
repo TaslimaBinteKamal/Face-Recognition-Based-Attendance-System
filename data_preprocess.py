@@ -1,4 +1,3 @@
-#Preprocess data with MTCNN
 from preprocess import preprocesses
 
 input_datadir = './train_img'
@@ -8,7 +7,7 @@ obj=preprocesses(input_datadir,output_datadir)
 nrof_images_total,nrof_successfully_aligned=obj.collect_data()
 
 print('Total number of images: %d' % nrof_images_total)
-print('Number of  aligned images: %d' % nrof_successfully_aligned)
+print('Number of total aligned images: %d' % nrof_successfully_aligned)
 
 
 
